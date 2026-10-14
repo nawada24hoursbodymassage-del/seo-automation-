@@ -1,3 +1,4 @@
+
 name: Daily SEO Audit
 
 on:
@@ -7,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   audit:
@@ -15,6 +17,13 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: seo-automation-511610
+          workload_identity_provider: projects/470659248808/locations/global/workloadIdentityPools/github-seo-automation/providers/github-actions
+          service_account: seo-gsc-reader@seo-automation-511610.iam.gserviceaccount.com
 
       - name: Extract starter kit
         run: |
@@ -43,3 +52,4 @@ jobs:
           path: reports/
           if-no-files-found: warn
           retention-days: 30
+          
